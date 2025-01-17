@@ -1,37 +1,54 @@
-const GEMINI_API_KEY = 'YOUR_GEMINI';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI("AIzaSyAyJEXAH9dLp_L0_7QJw0q1TIAKV63-VHk");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateMealPlan = async (preferences) => {
   try {
-    const response = await fetch(GEMINI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GEMINI_API_KEY}`
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `Generate a detailed meal plan based on these preferences: ${preferences}. 
-                   Include breakfast, lunch, dinner, and snacks. For each meal, provide the name,
-                   calories, and ingredients. Format as JSON with structure: 
-                   {breakfast: [{name, calories}], lunch: [{name, calories}], 
-                   dinner: [{name, calories}], snacks: [{name, calories}]}`
-          }]
-        }]
-      })
-    });
+    const prompt = `Create a meal plan for someone with these preferences: ${preferences}. 
+    Return ONLY a JSON object with this structure, no other text:
+    {
+      "breakfast": [{
+        "name": "Meal Name",
+        "calories": 300,
+        "ingredients": ["ingredient 1", "ingredient 2"]
+      }],
+      "lunch": [{
+        "name": "Meal Name",
+        "calories": 400,
+        "ingredients": ["ingredient 1", "ingredient 2"]
+      }],
+      "dinner": [{
+        "name": "Meal Name",
+        "calories": 500,
+        "ingredients": ["ingredient 1", "ingredient 2"]
+      }],
+      "snacks": [{
+        "name": "Meal Name",
+        "calories": 200,
+        "ingredients": ["ingredient 1", "ingredient 2"]
+      }]
+    }`;
 
-    if (!response.ok) {
-      throw new Error('Failed to generate meal plan');
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+
+    // Clean and parse the response
+    const cleanText = text.replace(/```json|```/g, '').trim();
+    console.log('API Response:', text);
+    console.log('Cleaned response:', cleanText);
+
+    try {
+      const mealPlan = JSON.parse(cleanText);
+      console.log('Parsed meal plan:', mealPlan);
+      return mealPlan;
+    } catch (parseError) {
+      console.error('JSON Parse Error:', parseError);
+      throw new Error('Invalid meal plan format received');
     }
-
-    const data = await response.json();
-    // Parse the response text as JSON since Gemini returns formatted text
-    const mealPlan = JSON.parse(data.candidates[0].content.parts[0].text);
-    return mealPlan;
   } catch (error) {
-    console.error('Gemini API Error:', error);
-    throw error;
+    console.error('API Error:', error);
+    throw new Error('Unable to generate meal plan');
   }
 };

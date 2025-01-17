@@ -2,20 +2,31 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const MealPlanDisplay = ({ title, meals }) => (
-  <View style={styles.mealCard}>
-    <Text style={styles.mealTitle}>{title}</Text>
-    {meals.map((meal, index) => (
-      <View key={index} style={styles.mealItem}>
-        <Ionicons name="restaurant-outline" size={24} color="#FF6B00" />
-        <View style={styles.mealDetails}>
-          <Text style={styles.mealName}>{meal.name}</Text>
-          <Text style={styles.mealCalories}>{meal.calories} calories</Text>
+const MealPlanDisplay = ({ title, meals }) => {
+  if (!meals || !Array.isArray(meals)) {
+    return null;
+  }
+
+  return (
+    <View style={styles.mealCard}>
+      <Text style={styles.mealTitle}>{title}</Text>
+      {meals.map((meal, index) => (
+        <View key={index} style={styles.mealItem}>
+          <Ionicons name="restaurant-outline" size={24} color="#FF6B00" />
+          <View style={styles.mealDetails}>
+            <Text style={styles.mealName}>{meal.name}</Text>
+            <Text style={styles.mealCalories}>{meal.calories} calories</Text>
+            {meal.ingredients && (
+              <Text style={styles.ingredients}>
+                Ingredients: {Array.isArray(meal.ingredients) ? meal.ingredients.join(', ') : meal.ingredients}
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
-    ))}
-  </View>
-);
+      ))}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   mealCard: {
@@ -37,8 +48,8 @@ const styles = StyleSheet.create({
   },
   mealItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
+    alignItems: 'flex-start',
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
   },
@@ -49,11 +60,18 @@ const styles = StyleSheet.create({
   mealName: {
     fontSize: 16,
     color: '#333',
+    fontWeight: '600',
     marginBottom: 4,
   },
   mealCalories: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 4,
+  },
+  ingredients: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
   },
 });
 
