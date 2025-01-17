@@ -12,6 +12,7 @@ import UserInput from './screens/UserInput';
 import Dashboard from './screens/Dashboard';
 import Exercise from './screens/Exercise';
 import Diet from './screens/Diet';
+import AdaptiveWorkout from './screens/AdaptiveWorkout';
 
 // Create the navigators
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,9 @@ const MainApp = () => (
           case 'Diet':
             iconName = focused ? 'nutrition' : 'nutrition-outline';
             break;
+          case 'AdaptiveWorkout':
+            iconName = focused ? 'book' : 'book-outline';
+            break;
         }
         return <Ionicons name={iconName} size={size} color={color} />;
       },
@@ -42,6 +46,7 @@ const MainApp = () => (
     <Tab.Screen name="Dashboard" component={Dashboard} />
     <Tab.Screen name="Exercise" component={Exercise} />
     <Tab.Screen name="Diet" component={Diet} />
+    <Tab.Screen name="AdaptiveWorkout" component={AdaptiveWorkout} />
   </Tab.Navigator>
 );
 

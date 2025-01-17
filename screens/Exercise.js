@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Button, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Gif from 'react-native-gif';
 
-// Exercise data with proper metadata
 const exerciseData = {
   light: [
     { 
@@ -12,7 +12,7 @@ const exerciseData = {
       breakTime: 10,
       caloriesBurn: 8,
       instructions: 'Keep your elbows close to your body and lower yourself slowly',
-      image: require('../src/assets/images/dips/dip1.gif'),
+      image: require('../src/assets/images/dips/dip3.gif'),
     },
     {
       id: 'dip2',
@@ -68,7 +68,6 @@ const Exercise = () => {
       setTimer(prev => prev - 1);
     } else {
       if (isBreak) {
-        // Break is over, move to next exercise
         setIsBreak(false);
         const nextExercise = exerciseData[selectedLevel][exerciseIndex + 1];
         if (nextExercise) {
@@ -81,7 +80,6 @@ const Exercise = () => {
           setIsWorkoutActive(false);
         }
       } else {
-        // Exercise is over, start break
         setIsBreak(true);
         setTimer(currentExercise.breakTime);
       }
@@ -186,7 +184,7 @@ const Exercise = () => {
         <>
           {currentExercise && (
             <View style={styles.exerciseDetails}>
-              <Image
+              <Gif
                 source={currentExercise.image}
                 style={styles.exerciseImage}
                 resizeMode="contain"
