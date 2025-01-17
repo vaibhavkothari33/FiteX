@@ -1,29 +1,37 @@
-// /src/utils/geminiAPI.js
+const GEMINI_API_KEY = 'AIzaSyDvqPYipnjb5jAozUqdmcboOrNqSKSZUWE';
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-const GEMINI_API_URL = "https://api.example.com/generate-meal-plan"; // Replace with actual API URL
-
-// Function to fetch meal plan based on dietary preferences
 export const generateMealPlan = async (preferences) => {
   try {
     const response = await fetch(GEMINI_API_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer YOUR_API_KEY`, // Replace with your actual API key
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GEMINI_API_KEY}`
       },
       body: JSON.stringify({
-        preferences: preferences,
-      }),
+        contents: [{
+          parts: [{
+            text: `Generate a detailed meal plan based on these preferences: ${preferences}. 
+                   Include breakfast, lunch, dinner, and snacks. For each meal, provide the name,
+                   calories, and ingredients. Format as JSON with structure: 
+                   {breakfast: [{name, calories}], lunch: [{name, calories}], 
+                   dinner: [{name, calories}], snacks: [{name, calories}]}`
+          }]
+        }]
+      })
     });
 
     if (!response.ok) {
-      throw new Error("Failed to generate meal plan.");
+      throw new Error('Failed to generate meal plan');
     }
 
     const data = await response.json();
-    return data;  // Assuming the API returns the meal plan data
+    // Parse the response text as JSON since Gemini returns formatted text
+    const mealPlan = JSON.parse(data.candidates[0].content.parts[0].text);
+    return mealPlan;
   } catch (error) {
-    console.error("Error fetching meal plan:", error);
-    throw error;  // Re-throw the error so the calling function can handle it
+    console.error('Gemini API Error:', error);
+    throw error;
   }
 };

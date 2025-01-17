@@ -1,4 +1,3 @@
-// /src/screens/Login.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
@@ -13,9 +12,8 @@ const Login = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Name"
-        value={email}
-        onChangeText={setName}
-        keyboardType="name"
+        value={name}
+        onChangeText={setName} // Fixed name input binding
       />
       <TextInput
         style={styles.input}
@@ -37,7 +35,7 @@ const Login = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.linkText}>New user? Sign up</Text>
       </TouchableOpacity>
     </View>

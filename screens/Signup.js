@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Signup = ({ navigation }) => {
+const SignUp = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,9 +14,9 @@ const Signup = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Name"
-        value={email}
+        value={name}
         onChangeText={setName}
-        keyboardType="name"
+       
       />
       <TextInput
         style={styles.input}
@@ -35,7 +35,7 @@ const Signup = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="confirm Password"
-        value={password}
+        value={ConfirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Signup;
+export default SignUp;

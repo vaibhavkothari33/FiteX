@@ -62,7 +62,7 @@ const Dashboard = () => {
    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <Text style={styles.title}>Hello Nalin</Text>
+          <Text style={styles.title}>Hello Vaibhav</Text>
           <TouchableOpacity 
             style={styles.shareButton}
             onPress={handleShare}
