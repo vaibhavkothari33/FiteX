@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Login = ({ navigation }) => {
+const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [ConfirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back</Text>
+      <Text style={styles.title}>Welcome</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -31,13 +32,20 @@ const Login = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        placeholder="confirm Password"
+        value={password}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => navigation.navigate('UserInput')} 
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.linkText}>New user? Sign up</Text>
       </TouchableOpacity>
     </View>
@@ -80,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Signup;

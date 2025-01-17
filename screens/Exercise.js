@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert,Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Gif from 'react-native-gif';
 
@@ -12,7 +12,7 @@ const exerciseData = {
       breakTime: 10,
       caloriesBurn: 8,
       instructions: 'Keep your elbows close to your body and lower yourself slowly',
-      image: require('../src/assets/images/dips/dip3.gif'),
+      image: require('../src/assets/images/dips/dip1.gif'),
     },
     {
       id: 'dip2',
@@ -184,7 +184,7 @@ const Exercise = () => {
         <>
           {currentExercise && (
             <View style={styles.exerciseDetails}>
-              <Gif
+              <Image
                 source={currentExercise.image}
                 style={styles.exerciseImage}
                 resizeMode="contain"
