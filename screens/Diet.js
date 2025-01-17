@@ -91,8 +91,8 @@ const Diet = () => {
           <Text style={styles.mealPlanTitle}>Your AI-Generated Meal Plan</Text>
           {mealPlan.breakfast && <MealPlanDisplay title="Breakfast" meals={mealPlan.breakfast} />}
           {mealPlan.lunch && <MealPlanDisplay title="Lunch" meals={mealPlan.lunch} />}
-          {mealPlan.dinner && <MealPlanDisplay title="Dinner" meals={mealPlan.dinner} />}
           {mealPlan.snacks && <MealPlanDisplay title="Snacks" meals={mealPlan.snacks} />}
+          {mealPlan.dinner && <MealPlanDisplay title="Dinner" meals={mealPlan.dinner} />}
         </View>
       )}
     </ScrollView>

@@ -1,5 +1,8 @@
-const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
-const GEMINI_API_URL = 'YOUR_GEMINI';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const GEMINI_API_KEY = "AIzaSyD-i2AbW8XGxzn5YBRRPvUlJHVPfhibIYM";
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateWorkoutPlan = async (userData) => {
   try {
@@ -30,30 +33,17 @@ export const generateWorkoutPlan = async (userData) => {
         ]
       }`;
 
-    const response = await fetch(GEMINI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GEMINI_API_KEY}`
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }]
-      })
-    });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
 
-    if (!response.ok) {
-      throw new Error('Failed to generate workout plan');
-    }
+    const cleanText = text.replace(/```json|```/g, '').trim();
+    console.log('Workout Plan Response:', text);
+    console.log('Cleaned response:', cleanText);
 
-    const data = await response.json();
-    return JSON.parse(data.candidates[0].content.parts[0].text);
+    return JSON.parse(cleanText);
   } catch (error) {
-    console.error('Gemini API Error:', error);
-    throw error;
+    console.error('Workout Plan Generation Error:', error);
+    throw new Error('Unable to generate workout plan');
   }
 };
-

@@ -27,9 +27,11 @@ const AdaptiveWorkout = ({ navigation }) => {
             const workouts = {
                 Easy: {
                     exercises: [
-                        { name: 'Push-ups', sets: 3, reps: '8-10', rest: '60s' },
-                        { name: 'Squats', sets: 3, reps: '12-15', rest: '60s' },
-                        { name: 'Plank', sets: 3, duration: '30s', rest: '45s' },
+                        { name: 'Bench Press', sets: 3, reps: '8-10', rest: '60s' },
+                        { name: 'Shoulder Press', sets: 3, reps: '12-15', rest: '60s' },
+                        { name: 'Tricep Extensions', sets: 3, duration: '30s', rest: '45s' },
+                        { name: 'Push-ups', sets: 3, duration: '30s', rest: '45s' },
+                        { name: 'Lunges', sets: 3, reps: '12-15 each leg', rest: '60s' }, // Added lunges
                     ],
                     duration: '30 min',
                     intensity: 'Low to Moderate',
@@ -39,6 +41,8 @@ const AdaptiveWorkout = ({ navigation }) => {
                         { name: 'Push-ups', sets: 4, reps: '12-15', rest: '60s' },
                         { name: 'Squats', sets: 4, reps: '20', rest: '60s' },
                         { name: 'Plank', sets: 4, duration: '45s', rest: '45s' },
+                        { name: 'Mountain Climbers', sets: 3, duration: '30s', rest: '45s' }, // Added mountain climbers
+                        { name: 'Glute Bridges', sets: 3, reps: '12-15', rest: '60s' }, // Added glute bridges
                     ],
                     duration: '40 min',
                     intensity: 'Moderate',
@@ -48,11 +52,14 @@ const AdaptiveWorkout = ({ navigation }) => {
                         { name: 'Push-ups', sets: 5, reps: '20-25', rest: '45s' },
                         { name: 'Squats', sets: 5, reps: '25', rest: '45s' },
                         { name: 'Plank', sets: 5, duration: '60s', rest: '30s' },
+                        { name: 'Bicycle Crunches', sets: 3, reps: '20 (10 each side)', rest: '45s' }, // Added bicycle crunches
+                        { name: 'Superman Hold', sets: 3, duration: '30s', rest: '45s' }, // Added superman hold
                     ],
                     duration: '50 min',
                     intensity: 'High',
                 },
             };
+            
 
             setCurrentWorkout(workouts[userLevel]);
             setLoading(false); // Hide loader
