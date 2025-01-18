@@ -29,8 +29,8 @@ const exerciseData = {
     {
       id: 'dip2',
       name: 'Bench Dips',
-      duration: 7,
-      breakTime: 5,
+      duration: 5,
+      breakTime: 2,
       caloriesBurn: 10,
       instructions: 'Keep your back straight and lower until arms are parallel',
       image: require('../src/assets/images/dips/dip2.gif'),

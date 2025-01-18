@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyDvqPYipnjb5jAozUqdmcboOrNqSKSZUWE");
+const genAI = new GoogleGenerativeAI("AIzaSyASeCp6PNdjKXEZBoaWSgzy8uJdV7oNUSk");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateMealPlan = async (preferences) => {

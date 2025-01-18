@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyAyJEXAH9dLp_L0_7QJw0q1TIAKV63-VHk");
+const genAI = new GoogleGenerativeAI("AIzaSyCZSadgasK6Gwn-u2g5Y_znDxgZojQzqsk");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateUserWorkout = async (userData) => {

@@ -12,7 +12,7 @@ const Entry = ({ navigation }) => {
     <View style={styles.container}>
       {/* Displaying the uploaded image */}
       {/* <Image source={require('./path/to/image.png')} style={styles.logo} /> */}
-      <Text style={styles.title}>FitExpo</Text>
+      <Text style={styles.title}>FiteX</Text>
       <Text style={styles.subtitle}>Track your Health Journey with ease</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#FF6B00" />
