@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import ActivityHeatmap from '../src/components/ActivityHeatmap';
 
 const StatsCard = ({ icon, title, value, goal, unit }) => {
   const progress = (value / goal) * 100;
@@ -108,9 +109,11 @@ const Dashboard = () => {
           <TipCard key={index} tip={tip} />
         ))}
       </View>
+      <ActivityHeatmap/>
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

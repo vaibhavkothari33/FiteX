@@ -20,8 +20,8 @@ const exerciseData = {
     {
       id: 'dip1',
       name: 'Basic Dips',
-      duration: 30,
-      breakTime: 10,
+      duration: 10,
+      breakTime: 5,
       caloriesBurn: 8,
       instructions: 'Keep your elbows close to your body and lower yourself slowly',
       image: require('../src/assets/images/dips/dip1.gif'),
@@ -29,8 +29,8 @@ const exerciseData = {
     {
       id: 'dip2',
       name: 'Bench Dips',
-      duration: 30,
-      breakTime: 10,
+      duration: 7,
+      breakTime: 5,
       caloriesBurn: 10,
       instructions: 'Keep your back straight and lower until arms are parallel',
       image: require('../src/assets/images/dips/dip2.gif'),
