@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity,Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ActivityHeatmap from '../src/components/ActivityHeatmap';
+import FitnessMetrics from '../src/components/FitnessMetrics';
 
 const StatsCard = ({ icon, title, value, goal, unit }) => {
   const progress = (value / goal) * 100;
@@ -35,6 +36,7 @@ const Dashboard = () => {
     steps: 7500,
     calories: 1800,
     water: 5,
+    heartRate: 75,
     goals: [],
   });
 
@@ -77,9 +79,10 @@ const Dashboard = () => {
           month: 'long', 
           day: 'numeric' 
         })}</Text>
+        <FitnessMetrics healthData={healthData}/>
       </View>
 
-      <View style={styles.statsContainer}>
+      {/* <View style={styles.statsContainer}>
         <StatsCard
           icon="footsteps"
           title="Steps"
@@ -101,7 +104,7 @@ const Dashboard = () => {
           goal={8}
           unit="glasses"
         />
-      </View>
+      </View> */}
 
       <View style={styles.tipsContainer}>
         <Text style={styles.sectionTitle}>Daily Tips</Text>
