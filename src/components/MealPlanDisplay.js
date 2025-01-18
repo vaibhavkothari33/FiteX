@@ -16,6 +16,7 @@ const MealPlanDisplay = ({ title, meals }) => {
           <View style={styles.mealDetails}>
             <Text style={styles.mealName}>{meal.name}</Text>
             <Text style={styles.mealCalories}>{meal.calories} calories</Text>
+            <Text style={styles.mealCalories}>{meal.proteins} g protein</Text>
             {meal.ingredients && (
               <Text style={styles.ingredients}>
                 Ingredients: {Array.isArray(meal.ingredients) ? meal.ingredients.join(', ') : meal.ingredients}

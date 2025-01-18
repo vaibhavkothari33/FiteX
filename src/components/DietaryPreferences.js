@@ -8,8 +8,12 @@ const DietaryPreferences = ({ selectedPreferences, onTogglePreference }) => {
     { id: 'vegan', label: 'Vegan', icon: 'nutrition-outline' },
     { id: 'highProtein', label: 'High Protein', icon: 'barbell-outline' },
     { id: 'lowCarb', label: 'Low Carb', icon: 'pizza-outline' },
+    { id: 'musclegain', label: 'Muscle Gain', icon: 'water-outline' },
     { id: 'glutenFree', label: 'Gluten Free', icon: 'warning-outline' },
-    { id: 'dairyFree', label: 'Dairy Free', icon: 'water-outline' },
+    { id: 'dairyFree', label: 'Dairy Free', icon: 'home-outline' },
+    { id: 'keto', label: 'Keto', icon: 'water-outline' },
+    { id: 'eggs', label: 'Eggs', icon: 'egg-outline' },
+    { id: 'lowsugar', label: 'Low Sugar', icon: 'cube-outline' },
   ];
 
   return (

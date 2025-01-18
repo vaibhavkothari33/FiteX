@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyAyJEXAH9dLp_L0_7QJw0q1TIAKV63-VHk");
+const genAI = new GoogleGenerativeAI("AIzaSyDvqPYipnjb5jAozUqdmcboOrNqSKSZUWE");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateMealPlan = async (preferences) => {
@@ -11,21 +11,25 @@ export const generateMealPlan = async (preferences) => {
       "breakfast": [{
         "name": "Meal Name",
         "calories": 300,
+        "proteins": 30,
         "ingredients": ["ingredient 1", "ingredient 2"]
       }],
       "lunch": [{
         "name": "Meal Name",
         "calories": 400,
+         "proteins": 150,
         "ingredients": ["ingredient 1", "ingredient 2"]
       }],
       "dinner": [{
         "name": "Meal Name",
         "calories": 500,
+         "proteins": 100,
         "ingredients": ["ingredient 1", "ingredient 2"]
       }],
       "snacks": [{
         "name": "Meal Name",
         "calories": 200,
+         "proteins": 200,
         "ingredients": ["ingredient 1", "ingredient 2"]
       }]
     }`;
