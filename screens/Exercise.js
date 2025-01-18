@@ -1,11 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert,Image } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Image,
+  Animated,
+  Dimensions
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Gif from 'react-native-gif';
+
+const { width } = Dimensions.get('window');
+
 
 const exerciseData = {
   light: [
-    { 
+    {
       id: 'dip1',
       name: 'Basic Dips',
       duration: 30,
@@ -132,6 +144,28 @@ const Exercise = () => {
   const [totalCaloriesBurned, setTotalCaloriesBurned] = useState(0);
   const [isWorkoutActive, setIsWorkoutActive] = useState(false);
   const [workoutComplete, setWorkoutComplete] = useState(false);
+  const [cardScale] = useState(new Animated.Value(1));
+
+
+  const animatePress = () => {
+    Animated.sequence([
+      Animated.timing(cardScale, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardScale, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleLevelSelect = (level) => {
+    animatePress();
+    setTimeout(() => setSelectedLevel(level), 200);
+  };
 
   const handleTimer = useCallback(() => {
     if (!isWorkoutActive) return;
@@ -165,7 +199,7 @@ const Exercise = () => {
 
   const startWorkout = () => {
     if (!selectedLevel) return;
-    
+
     const firstExercise = exerciseData[selectedLevel][0];
     setCurrentExercise(firstExercise);
     setTimer(firstExercise.duration);
@@ -206,24 +240,47 @@ const Exercise = () => {
   };
 
   const renderLevelSelection = () => (
-    <View style={styles.levelSelection}>
-      {Object.keys(exerciseData).map((level) => (
-        <TouchableOpacity
-          key={level}
-          style={[
-            styles.levelCard,
-            { backgroundColor: level === 'light' ? '#FF6B00' : level === 'medium' ? '#4CAF50' : '#f44336' }
-          ]}
-          onPress={() => setSelectedLevel(level)}
-        >
-          <Text style={styles.levelTitle}>{level.charAt(0).toUpperCase() + level.slice(1)}</Text>
-          <Text style={styles.levelDesc}>
-            {level === 'light' ? '15 min • Beginner' : 
-             level === 'medium' ? '25 min • Intermediate' : 
-             '40 min • Advanced'}
-          </Text>
-        </TouchableOpacity>
-      ))}
+    <View style={styles.levelSelectionContainer}>
+      <Text style={styles.welcomeText}>Choose Your Workout Level</Text>
+      <View style={styles.levelSelection}>
+        {Object.keys(exerciseData).map((level) => (
+          <Animated.View
+            key={level}
+            style={[
+              styles.levelCardContainer,
+              { transform: [{ scale: cardScale }] }
+            ]}
+          >
+            <TouchableOpacity
+              style={[
+                styles.levelCard,
+                { backgroundColor: '#FF6B00' } // Or whatever color you're using
+              ]}
+              onPress={() => handleLevelSelect(level)}
+            >
+              <View style={styles.levelCardContent}>
+                <Text style={styles.levelTitle}>
+                  {level.charAt(0).toUpperCase() + level.slice(1)}
+                </Text>
+                <Text style={styles.levelDesc}>
+                  {level === 'light' ? '15 min • Beginner' :
+                    level === 'medium' ? '25 min • Intermediate' :
+                      '40 min • Advanced'}
+                </Text>
+              </View>
+              <Ionicons
+                name={
+                  level === 'light' ? 'walk-outline' :
+                    level === 'medium' ? 'bicycle-outline' :
+                      'barbell-outline'
+                }
+                size={40}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
+      </View>
     </View>
   );
 
@@ -245,7 +302,7 @@ const Exercise = () => {
           <Text style={styles.completionStats}>
             Calories Burned: {totalCaloriesBurned}
           </Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.newWorkoutButton}
             onPress={resetWorkout}
           >
@@ -284,7 +341,7 @@ const Exercise = () => {
 
           <View style={styles.controls}>
             {!isWorkoutActive ? (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.startButton}
                 onPress={currentExercise ? resumeWorkout : startWorkout}
               >
@@ -293,7 +350,7 @@ const Exercise = () => {
                 </Text>
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.pauseButton}
                 onPress={pauseWorkout}
               >
@@ -324,117 +381,208 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    backgroundColor: '#fff',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   backButton: {
     marginRight: 15,
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#f5f5f5',
+  },
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    color: '#333',
+    textAlign: 'center',
   },
   levelSelection: {
-    padding: 20,
-    gap: 15,
-  },
-  levelCard: {
-    padding: 20,
-    borderRadius: 15,
+    width: '100%',
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    gap: 20,
     alignItems: 'center',
   },
+  levelCard: {
+    padding: 25,
+    borderRadius: 12,
+    alignItems: 'center',
+    width: '90%', // Increased width
+    height: 140, // Fixed height for rectangular shape
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    flexDirection: 'row', // Changed to row layout
+    justifyContent: 'space-between', // Space between elements
+    paddingHorizontal: 30, // More horizontal padding
+  },
+  levelCardContent: {
+    alignItems: 'flex-start', // Align text to the left
+  },
   levelTitle: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 5,
+    marginBottom: 8,
   },
   levelDesc: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#fff',
+    opacity: 0.9,
   },
+
   exerciseContainer: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   exerciseTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
   },
   exerciseDetails: {
     padding: 20,
+    backgroundColor: '#fff',
   },
   exerciseImage: {
     width: '100%',
-    height: 300,
-    marginBottom: 20,
-    borderRadius: 15,
+    height: 320,
+    marginBottom: 25,
+    borderRadius: 20,
+    backgroundColor: '#f5f5f5',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   infoContainer: {
-    backgroundColor: '#f5f5f5',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+    backgroundColor: '#f8f8f8',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 25,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   timerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: '800',
     color: '#FF6B00',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
+    letterSpacing: 0.5,
   },
   instructions: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: 17,
+    color: '#555',
     textAlign: 'center',
+    lineHeight: 24,
   },
   progressContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 25,
+    padding: 15,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   progressText: {
     fontSize: 16,
-    color: '#666',
+    color: '#555',
+    fontWeight: '600',
   },
   caloriesText: {
     fontSize: 16,
     color: '#FF6B00',
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   controls: {
     padding: 20,
+    paddingBottom: 30,
   },
   startButton: {
     backgroundColor: '#FF6B00',
-    padding: 15,
-    borderRadius: 10,
+    padding: 18,
+    borderRadius: 15,
     alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   pauseButton: {
-    backgroundColor: '#666',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: '#555',
+    padding: 18,
+    borderRadius: 15,
     alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   completionCard: {
     alignItems: 'center',
     padding: 30,
+    margin: 20,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   completionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: '800',
     marginVertical: 15,
+    color: '#333',
+    letterSpacing: 0.5,
   },
   completionStats: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 20,
+    fontSize: 20,
+    color: '#555',
+    marginBottom: 25,
+    fontWeight: '600',
   },
   newWorkoutButton: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: '#FF6B00',
+    padding: 18,
+    borderRadius: 15,
     alignItems: 'center',
     width: '100%',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
 });
 

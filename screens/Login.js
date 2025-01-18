@@ -13,7 +13,7 @@ const Login = ({ navigation }) => {
         style={styles.input}
         placeholder="Name"
         value={name}
-        onChangeText={setName} // Fixed name input binding
+        onChangeText={setName}
       />
       <TextInput
         style={styles.input}
@@ -31,7 +31,7 @@ const Login = ({ navigation }) => {
       />
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => navigation.navigate('UserInput')} 
+        onPress={() => navigation.navigate('UserInput')}
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -46,25 +46,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center', // Center items vertically
+    alignItems: 'center', // Center items horizontally
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 20,
+    marginBottom: 30,
+    textAlign: 'center',
   },
   input: {
     backgroundColor: '#f5f5f5',
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
+    width: '90%', // Adjust width for responsive design
   },
   loginButton: {
     backgroundColor: '#FF6B00',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    width: '90%', // Adjust width for responsive design
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
@@ -74,7 +80,8 @@ const styles = StyleSheet.create({
   linkText: {
     color: '#FF6B00',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 15,
+    fontSize: 14,
   },
 });
 
