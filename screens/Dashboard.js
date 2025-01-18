@@ -34,9 +34,9 @@ const TipCard = ({ tip }) => (
 const Dashboard = () => {
   const [healthData, setHealthData] = useState({
     steps: 7500,
-    calories: 1800,
+    calories: 450,
     water: 5,
-    heartRate: 75,
+    heartRate: 91,
     goals: [],
   });
 

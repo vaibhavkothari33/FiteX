@@ -25,6 +25,13 @@ const FitnessMetrics = ({ healthData }) => {
       unit: 'bpm',
       color: '#FF4757',
     },
+    {
+      title: 'Water',
+      value: healthData.water || 5,
+      maxValue: 8,
+      unit: 'glass',
+      color: 'cyan',
+    },
   ];
 
   return (
