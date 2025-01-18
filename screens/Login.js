@@ -31,11 +31,15 @@ const Login = ({ navigation }) => {
       />
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => navigation.navigate('UserInput')}
+        // onPress={() => navigation.navigate('UserInput')}
+        onPress={() => navigation.navigate('MainApp')} // Navigate to MainApp
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+      <TouchableOpacity 
+      onPress={() => navigation.navigate('SignUp')}
+      // onPress={() => navigation.navigate('MainApp')} // Navigate to MainApp
+      >
         <Text style={styles.linkText}>New user? Sign up</Text>
       </TouchableOpacity>
     </View>
