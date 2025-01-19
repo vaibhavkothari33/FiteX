@@ -41,32 +41,27 @@ FiteX is a modern fitness application designed to help users achieve their healt
 - **Animated API**: Enabling smooth and engaging animations.
 - **SVG**: For rendering dynamic circular progress indicators.
 
-## 📸 images
+## 📸 Images  
 
-### Login
+### Login  
+<img src="./images/login.jpeg" alt="Login" width="300" />  
 
-![Login](./images/login.jpeg)
+### Dashboard  
+<img src="./images/dashboard.jpeg" alt="Dashboard" width="300" />  
 
-### Dashboard
+### Activity Heatmap  
+<img src="./images/activity.jpeg" alt="Activity Heatmap" width="300" />  
 
-![Dashboard](./images/dashboard.jpeg)
+### Exercise Controls  
+<img src="./images/exercise.jpeg" alt="Exercise Controls" width="300" />  
 
-### Activity Heatmap
+### AI Powered Meal Plan  
+<img src="./images/meal1.jpeg" alt="Meal Plan 1" width="300" />  
+<img src="./images/meal.jpeg" alt="Meal Plan 2" width="300" />  
 
-![Activity Heatmap](./images/activity.jpeg)
+### Workout  
+<img src="./images/workout.jpeg" alt="Workout" width="300" />  
 
-### Exercise Controls
-
-![Exercise Controls](./images/exercise.jpeg)
-
-### AI Powered Meal Plan
-
-![Exercise Routines](./images/meal1.jpeg)
-![Exercise Routines](./images/meal.jpeg)
-
-### Exercise Controls
-
-![Workout](./images/workout.jpeg)
 
 ## 📝 License
 
