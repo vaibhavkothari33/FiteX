@@ -13,6 +13,7 @@ import Exercise from './screens/Exercise';
 import Diet from './screens/Diet';
 import AdaptiveWorkout from './screens/AdaptiveWorkout';
 import WorkoutPlan from './screens/WorkoutPlan';
+import CheatMealDetector from './screens/CheatMealDetector';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,8 +34,11 @@ const MainApp = () => (
           case 'Diet':
             iconName = focused ? 'nutrition' : 'nutrition-outline';
             break;
-          case 'AdaptiveWorkout':
-            iconName = focused ? 'book' : 'book-outline';
+          case 'CheatMeal':
+            iconName = focused ? 'fast-food' : 'fast-food-outline';
+            break;
+          case 'Workout':
+            iconName = focused ? 'barbell' : 'barbell-outline';
             break;
         }
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -46,7 +50,8 @@ const MainApp = () => (
     <Tab.Screen name="Dashboard" component={Dashboard} />
     <Tab.Screen name="Exercise" component={Exercise} />
     <Tab.Screen name="Diet" component={Diet} />
-    <Tab.Screen name="AdaptiveWorkout" component={AdaptiveWorkout} />
+    <Tab.Screen name="Workout" component={AdaptiveWorkout} />
+    <Tab.Screen name="CheatMeal" component={CheatMealDetector} />
   </Tab.Navigator>
 );
 

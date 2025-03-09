@@ -1,411 +1,27 @@
-// import React, { useState } from 'react';
-// import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput ,ActivityIndicator} from 'react-native';
-// import { Ionicons } from '@expo/vector-icons';
-// import { Linking } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    TextInput,
+    ActivityIndicator,
+    Animated,
+    ImageBackground,
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { generateUserWorkout } from '../utils/geminiUser';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-// const DIFFICULTY_LEVELS = {
-//     TOO_EASY: 'Too Easy',
-//     JUST_RIGHT: 'Just Right',
-//     TOO_HARD: 'Too Hard',
-// };
-
-// const AdaptiveWorkout = ({ navigation }) => {
-//     const [currentWorkout, setCurrentWorkout] = useState(null);
-//     const [workoutHistory, setWorkoutHistory] = useState([]);
-//     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-//     const [loading, setLoading] = useState(false);
-//     const [feedback, setFeedback] = useState({
-//         difficulty: null,
-//         notes: '',
-//     });
-//     const [userLevel, setUserLevel] = useState('Easy');
-//     const [isGenerating, setIsGenerating] = useState(false);
-
-//     const generateWorkout = () => {
-//         setLoading(true); // Show loader
-//         setTimeout(() => {
-//             const workouts = {
-//                 Easy: {
-//                     exercises: [
-//                         { name: 'Bench Press', sets: 3, reps: '8-10', rest: '60s' },
-//                         { name: 'Shoulder Press', sets: 3, reps: '12-15', rest: '60s' },
-//                         { name: 'Tricep Extensions', sets: 3, duration: '30s', rest: '45s' },
-//                         { name: 'Push-ups', sets: 3, duration: '30s', rest: '45s' },
-//                         { name: 'Lunges', sets: 3, reps: '12-15 each leg', rest: '60s' }, // Added lunges
-//                     ],
-//                     duration: '30 min',
-//                     intensity: 'Low to Moderate',
-//                 },
-//                 Medium: {
-//                     exercises: [
-//                         { name: 'Push-ups', sets: 4, reps: '12-15', rest: '60s' },
-//                         { name: 'Squats', sets: 4, reps: '20', rest: '60s' },
-//                         { name: 'Plank', sets: 4, duration: '45s', rest: '45s' },
-//                         { name: 'Mountain Climbers', sets: 3, duration: '30s', rest: '45s' }, // Added mountain climbers
-//                         { name: 'Glute Bridges', sets: 3, reps: '12-15', rest: '60s' }, // Added glute bridges
-//                     ],
-//                     duration: '40 min',
-//                     intensity: 'Moderate',
-//                 },
-//                 Intense: {
-//                     exercises: [
-//                         { name: 'Push-ups', sets: 5, reps: '20-25', rest: '45s' },
-//                         { name: 'Squats', sets: 5, reps: '25', rest: '45s' },
-//                         { name: 'Plank', sets: 5, duration: '60s', rest: '30s' },
-//                         { name: 'Bicycle Crunches', sets: 3, reps: '20 (10 each side)', rest: '45s' }, // Added bicycle crunches
-//                         { name: 'Superman Hold', sets: 3, duration: '30s', rest: '45s' }, // Added superman hold
-//                     ],
-//                     duration: '50 min',
-//                     intensity: 'High',
-//                 },
-//             };
-            
-
-//             setCurrentWorkout(workouts[userLevel]);
-//             setLoading(false); // Hide loader
-//             setIsGenerating(false); // Hide generating message
-//         }, 3000); // Simulate loading for 3 seconds
-//     };
-
-//     const handleUserLevelChange = (level) => {
-//         setIsGenerating(true); // Show generating message
-//         setUserLevel(level);
-//         generateWorkout();
-//     };
-
-//     const handleWorkoutComplete = () => {
-//         setShowFeedbackModal(true);
-//     };
-
-//     const submitFeedback = () => {
-//         if (feedback.difficulty === DIFFICULTY_LEVELS.TOO_EASY) {
-//             setUserLevel(prev => (prev === 'Easy' ? 'Medium' : 'Intense'));
-//         } else if (feedback.difficulty === DIFFICULTY_LEVELS.TOO_HARD) {
-//             setUserLevel(prev => (prev === 'Intense' ? 'Medium' : 'Easy'));
-//         }
-
-//         setWorkoutHistory(prev => [
-//             ...prev,
-//             { ...currentWorkout, date: new Date(), feedback },
-//         ]);
-//         setShowFeedbackModal(false);
-//         setFeedback({ difficulty: null, notes: '' });
-//     };
-
-//     const renderExercise = (exercise, index) => (
-//         <View key={index} style={styles.exerciseCard}>
-//             <View style={styles.exerciseHeader}>
-//                 <Text style={styles.exerciseName}>{exercise.name}</Text>
-//                 <Ionicons name="fitness-outline" size={24} color="#FF6B00" />
-//             </View>
-//             <View style={styles.exerciseDetails}>
-//                 <Text style={styles.exerciseInfo}>Sets: {exercise.sets}</Text>
-//                 <Text style={styles.exerciseInfo}>
-//                     {exercise.reps ? `Reps: ${exercise.reps}` : `Duration: ${exercise.duration}`}
-//                 </Text>
-//                 <Text style={styles.exerciseInfo}>Rest: {exercise.rest}</Text>
-//             </View>
-//         </View>
-//     );
-
-//     return (
-//         <ScrollView style={styles.container}>
-//             <View style={styles.header}>
-//                 <TouchableOpacity
-//                     style={styles.backButton}
-//                     onPress={() => Linking.openURL(Linking.makeUrl())}
-//                 >
-//                     <Ionicons name="arrow-back" size={24} color="#333" />
-//                 </TouchableOpacity>
-
-//                 <Text style={styles.title}>Workout for You</Text>
-//                 <View style={styles.levelSelector}>
-//                     <Text style={styles.subtitle}>Choose your workout level:</Text>
-//                     <View style={styles.levelButtons}>
-//                         {['Easy', 'Medium', 'Intense'].map(level => (
-//                             <TouchableOpacity
-//                                 key={level}
-//                                 style={[
-//                                     styles.levelButton,
-//                                     userLevel === level && styles.selectedLevelButton,
-//                                 ]}
-//                                 onPress={() => handleUserLevelChange(level)}
-//                             >
-//                                 <Text
-//                                     style={[
-//                                         styles.levelButtonText,
-//                                         userLevel === level && styles.selectedLevelButtonText,
-//                                     ]}
-//                                 >
-//                                     {level.charAt(0).toUpperCase() + level.slice(1)}
-//                                 </Text>
-//                             </TouchableOpacity>
-//                         ))}
-//                     </View>
-//                 </View>
-//             </View>
-//             {loading ? (
-//                 <ActivityIndicator size="large" color="#FF6B00" style={styles.loader} />
-//             ) : isGenerating ? (
-//                 <Text style={styles.generatingText}>Generating an ideal plan for you, please wait...</Text>
-//             ) : !currentWorkout ? (
-//                 <TouchableOpacity style={styles.generateButton} onPress={generateWorkout}>
-//                     <Text style={styles.buttonText}>Generate Workout</Text>
-//                 </TouchableOpacity>
-//             ) : (
-//                 <View style={styles.workoutContainer}>
-//                     <View style={styles.workoutHeader}>
-//                         <Text style={styles.workoutTitle}>Today's Workout</Text>
-//                         <View style={styles.workoutMeta}>
-//                             <Text style={styles.metaText}>Duration: {currentWorkout.duration}</Text>
-//                             <Text style={styles.metaText}>Intensity: {currentWorkout.intensity}</Text>
-//                         </View>
-//                     </View>
-//                     {currentWorkout.exercises.map((exercise, index) => renderExercise(exercise, index))}
-//                     <TouchableOpacity style={styles.completeButton} onPress={handleWorkoutComplete}>
-//                         <Text style={styles.buttonText}>Complete Workout</Text>
-//                     </TouchableOpacity>
-//                 </View>
-//             )}
-
-//             <Modal visible={showFeedbackModal} animationType="slide" transparent={true}>
-//                 <View style={styles.modalContainer}>
-//                     <View style={styles.modalContent}>
-//                         <Text style={styles.modalTitle}>How was your workout?</Text>
-
-//                         <View style={styles.difficultyButtons}>
-//                             {Object.values(DIFFICULTY_LEVELS).map(level => (
-//                                 <TouchableOpacity
-//                                     key={level}
-//                                     style={[
-//                                         styles.difficultyButton,
-//                                         feedback.difficulty === level && styles.selectedDifficulty,
-//                                     ]}
-//                                     onPress={() => setFeedback(prev => ({ ...prev, difficulty: level }))}
-//                                 >
-//                                     <Text
-//                                         style={[
-//                                             styles.difficultyButtonText,
-//                                             feedback.difficulty === level && styles.selectedDifficultyText,
-//                                         ]}
-//                                     >
-//                                         {level}
-//                                     </Text>
-//                                 </TouchableOpacity>
-//                             ))}
-//                         </View>
-
-//                         <TextInput
-//                             style={styles.notesInput}
-//                             placeholder="Additional notes (optional)"
-//                             value={feedback.notes}
-//                             onChangeText={text => setFeedback(prev => ({ ...prev, notes: text }))}
-//                             multiline
-//                         />
-
-//                         <TouchableOpacity style={styles.submitButton} onPress={submitFeedback}>
-//                             <Text style={styles.buttonText}>Submit Feedback</Text>
-//                         </TouchableOpacity>
-//                     </View>
-//                 </View>
-//             </Modal>
-//         </ScrollView>
-//     );
-// };
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         backgroundColor: '#fff',
-//     },
-//     header: {
-//         padding: 20,
-//         position: 'relative',
-//     },
-//     backButton: {
-//         position: 'absolute',
-//         top: 20,
-//         left: 20,
-//         padding: 8,
-//     },
-//     title: {
-//         fontSize: 28,
-//         fontWeight: 'bold',
-//         color: '#333',
-//         marginBottom: 8,
-//         textAlign: 'center',
-//     },
-//     subtitle: {
-//         fontSize: 16,
-//         color: '#666',
-//         marginBottom: 10,
-//     },
-//     levelSelector: {
-//         marginBottom: 20,
-//     },
-//     levelButtons: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-around',
-//     },
-//     levelButton: {
-//         width: 200,
-//         padding: 12,
-//         borderRadius: 8,
-//         borderWidth: 1,
-//         borderColor: '#ddd',
-//         flex: 1,
-//         marginHorizontal: 5,
-//     },
-//     loader: {
-//         marginTop: 50,
-//         alignSelf: 'center',
-//     },    
-//     selectedLevelButton: {
-//         backgroundColor: '#FF6B00',
-//         borderColor: '#FF6B00',
-//     },
-//     levelButtonText: {
-//         textAlign: 'center',
-//         color: '#666',
-//     },
-//     selectedLevelButtonText: {
-//         color: '#fff',
-//     },
-//     generateButton: {
-//         backgroundColor: '#FF6B00',
-//         margin: 20,
-//         padding: 15,
-//         borderRadius: 12,
-//         alignItems: 'center',
-//     },
-//     buttonText: {
-//         color: '#fff',
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//     },
-//     workoutContainer: {
-//         padding: 20,
-//     },
-//     workoutHeader: {
-//         marginBottom: 20,
-//     },
-//     workoutTitle: {
-//         fontSize: 24,
-//         fontWeight: 'bold',
-//         color: '#333',
-//         marginBottom: 8,
-//     },
-//     workoutMeta: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//     },
-//     metaText: {
-//         fontSize: 16,
-//         color: '#666',
-//     },
-//     exerciseCard: {
-//         backgroundColor: '#fff',
-//         borderRadius: 12,
-//         padding: 16,
-//         marginBottom: 16,
-//         elevation: 2,
-//         shadowColor: '#000',
-//         shadowOffset: { width: 0, height: 2 },
-//         shadowOpacity: 0.1,
-//         shadowRadius: 4,
-//     },
-//     exerciseHeader: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         alignItems: 'center',
-//         marginBottom: 12,
-//     },
-//     exerciseName: {
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//         color: '#333',
-//     },
-//     exerciseDetails: {
-//         gap: 8,
-//     },
-//     exerciseInfo: {
-//         fontSize: 16,
-//         color: '#666',
-//     },
-//     completeButton: {
-//         backgroundColor: '#4CAF50',
-//         padding: 15,
-//         borderRadius: 12,
-//         alignItems: 'center',
-//         marginTop: 20,
-//     },
-//     modalContainer: {
-//         flex: 1,
-//         backgroundColor: 'rgba(0,0,0,0.5)',
-//         justifyContent: 'center',
-//         padding: 20,
-//     },
-//     modalContent: {
-//         backgroundColor: '#fff',
-//         borderRadius: 12,
-//         padding: 20,
-//     },
-//     modalTitle: {
-//         fontSize: 24,
-//         fontWeight: 'bold',
-//         color: '#333',
-//         marginBottom: 20,
-//         textAlign: 'center',
-//     },
-//     difficultyButtons: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         marginBottom: 20,
-//     },
-//     difficultyButton: {
-//         padding: 12,
-//         borderRadius: 8,
-//         borderWidth: 1,
-//         borderColor: '#ddd',
-//         flex: 1,
-//         marginHorizontal: 5,
-//     },
-//     selectedDifficulty: {
-//         backgroundColor: '#FF6B00',
-//         borderColor: '#FF6B00',
-//     },
-//     difficultyButtonText: {
-//         textAlign: 'center',
-//         color: '#666',
-//     },
-//     selectedDifficultyText: {
-//         color: '#fff',
-//     },
-//     notesInput: {
-//         borderWidth: 1,
-//         borderColor: '#ddd',
-//         borderRadius: 8,
-//         padding: 12,
-//         marginBottom: 20,
-//         minHeight: 100,
-//         textAlignVertical: 'top',
-//     },
-//     submitButton: {
-//         backgroundColor: '#FF6B00',
-//         padding: 15,
-//         borderRadius: 12,
-//         alignItems: 'center',
-//     },
-// });
-
-// export default AdaptiveWorkout;
-
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Updated import
-import { generateUserWorkout } from '../utils/geminiUser'; // Import the function
+const { width, height } = Dimensions.get('window');
 
 const AdaptiveWorkout = () => {
+    // Form state
     const [age, setAge] = useState('');
     const [weight, setWeight] = useState('');
     const [height, setHeight] = useState('');
@@ -414,215 +30,781 @@ const AdaptiveWorkout = () => {
     const [daysPerWeek, setDaysPerWeek] = useState('2');
     const [healthConditions, setHealthConditions] = useState('');
     const [equipmentAccess, setEquipmentAccess] = useState('minimal');
+
+    // UI state
     const [currentWorkout, setCurrentWorkout] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [currentStep, setCurrentStep] = useState(1);
+    const scrollViewRef = useRef();
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    // Step validation
+    const isStep1Valid = age !== '' && weight !== '' && height !== '';
+    const isStep2Valid = true; // These are dropdowns with default values
+    const isStep3Valid = true; // Health conditions can be empty
+
+    // Goal descriptions for better context
+    const goalDescriptions = {
+        weight_loss: 'Burn calories and reduce body fat',
+        weight_gain: 'Build mass with progressive overload',
+        endurance: 'Improve stamina and cardiovascular health',
+        muscle_building: 'Hypertrophy-focused training for muscle growth',
+        powerbuilding: 'Blend of strength and muscle building'
+    };
+
+    // Equipment descriptions
+    const equipmentDescriptions = {
+        minimal: 'Bodyweight exercises, resistance bands',
+        basic: 'Access to dumbbells, basic machines',
+        full: 'Full range of equipment including barbells and specialized machines'
+    };
 
     const generateWorkout = async () => {
-        setLoading(true); // Show loader
+        setLoading(true);
+        setError(null);
+
         try {
-            const workout = await generateUserWorkout({ 
+            const workout = await generateUserWorkout({
                 age,
                 weight,
                 height,
-                level: userLevel, 
-                goal: fitnessGoal, 
-                days: daysPerWeek, 
-                healthConditions, 
-                equipment: equipmentAccess 
-            }); // Fetch workout from geminiUser
-            setCurrentWorkout(workout); // Set the fetched workout
+                level: userLevel,
+                goal: fitnessGoal,
+                days: daysPerWeek,
+                healthConditions,
+                equipment: equipmentAccess
+            });
+
+            setCurrentWorkout(workout);
+
+            // Animate the workout appearance
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: true
+            }).start();
+
         } catch (error) {
             console.error('Error generating workout:', error);
             setError('Failed to generate workout. Please try again.');
         } finally {
-            setLoading(false); // Hide loader
+            setLoading(false);
         }
     };
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Generate Your Workout Plan</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your age"
-                value={age}
-                onChangeText={setAge}
-                keyboardType="numeric"
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your weight (kg)"
-                value={weight}
-                onChangeText={setWeight}
-                keyboardType="numeric"
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your height (cm)"
-                value={height}
-                onChangeText={setHeight}
-                keyboardType="numeric"
-            />
-            <Text style={styles.label}>Fitness Level</Text>
-            <Picker
-                selectedValue={userLevel}
-                style={styles.picker}
-                onValueChange={(value) => setUserLevel(value)}
+    const nextStep = () => {
+        if (currentStep === 1 && !isStep1Valid) {
+            setError('Please fill in all required fields');
+            return;
+        }
+
+        setError(null);
+        if (currentStep < 3) {
+            setCurrentStep(currentStep + 1);
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+        } else {
+            generateWorkout();
+        }
+    };
+
+    const prevStep = () => {
+        if (currentStep > 1) {
+            setCurrentStep(currentStep - 1);
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+        }
+    };
+
+    const resetForm = () => {
+        setCurrentWorkout(null);
+        setCurrentStep(1);
+        // Optionally reset all form fields if you want users to start fresh
+    };
+
+    // Render each step based on current step
+    const renderStep = () => {
+        switch (currentStep) {
+            case 1:
+                return renderBasicInfoStep();
+            case 2:
+                return renderFitnessGoalsStep();
+            case 3:
+                return renderHealthAndEquipmentStep();
+            default:
+                return null;
+        }
+    };
+
+    const renderBasicInfoStep = () => (
+        <View style={styles.stepContainer}>
+            <Text style={styles.stepTitle}>Step 1: Basic Information</Text>
+            <Text style={styles.stepDescription}>Let's start with some basic stats to personalize your workout plan.</Text>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Age</Text>
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your age"
+                        value={age}
+                        onChangeText={setAge}
+                        keyboardType="numeric"
+                        maxLength={3}
+                    />
+                    <View style={styles.inputIcon}>
+                        <Ionicons name="calendar-outline" size={22} color="#777" />
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Weight (kg)</Text>
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your weight in kg"
+                        value={weight}
+                        onChangeText={setWeight}
+                        keyboardType="numeric"
+                        maxLength={3}
+                    />
+                    <View style={styles.inputIcon}>
+                        <Ionicons name="barbell-outline" size={22} color="#777" />
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Height (cm)</Text>
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your height in cm"
+                        value={height}
+                        onChangeText={setHeight}
+                        keyboardType="numeric"
+                        maxLength={3}
+                    />
+                    <View style={styles.inputIcon}>
+                        <Ionicons name="resize-outline" size={22} color="#777" />
+                    </View>
+                </View>
+            </View>
+        </View>
+    );
+
+    const renderFitnessGoalsStep = () => (
+        <View style={styles.stepContainer}>
+            <Text style={styles.stepTitle}>Step 2: Fitness Goals</Text>
+            <Text style={styles.stepDescription}>Tell us about your fitness goals and experience level.</Text>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Your Fitness Level</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={userLevel}
+                        style={styles.picker}
+                        onValueChange={(value) => setUserLevel(value)}
+                    >
+                        <Picker.Item label="Beginner" value="beginner" />
+                        <Picker.Item label="Intermediate" value="intermediate" />
+                        <Picker.Item label="Advanced" value="advanced" />
+                    </Picker>
+                </View>
+            </View>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Your Fitness Goal</Text>
+                <View style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={fitnessGoal}
+                        style={styles.picker}
+                        onValueChange={(value) => setFitnessGoal(value)}
+                    >
+                        <Picker.Item label="Weight Loss" value="weight_loss" />
+                        <Picker.Item label="Weight Gain" value="weight_gain" />
+                        <Picker.Item label="Endurance" value="endurance" />
+                        <Picker.Item label="Muscle Building" value="muscle_building" />
+                        <Picker.Item label="Powerbuilding" value="powerbuilding" />
+                    </Picker>
+                </View>
+                <Text style={styles.helperText}>{goalDescriptions[fitnessGoal]}</Text>
+            </View>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Days per Week</Text>
+                <View style={styles.daysSelector}>
+                    {['2', '3', '4', '5', '6'].map(day => (
+                        <TouchableOpacity
+                            key={day}
+                            style={[
+                                styles.dayButton,
+                                daysPerWeek === day && styles.dayButtonSelected
+                            ]}
+                            onPress={() => setDaysPerWeek(day)}
+                        >
+                            <Text
+                                style={[
+                                    styles.dayButtonText,
+                                    daysPerWeek === day && styles.dayButtonTextSelected
+                                ]}
+                            >
+                                {day}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </View>
+        </View>
+    );
+
+    const renderHealthAndEquipmentStep = () => (
+        <View style={styles.stepContainer}>
+            <Text style={styles.stepTitle}>Step 3: Health & Equipment</Text>
+            <Text style={styles.stepDescription}>Let us know about any health concerns and what equipment you have access to.</Text>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Health Conditions (Optional)</Text>
+                <View style={styles.textAreaWrapper}>
+                    <TextInput
+                        style={styles.textArea}
+                        placeholder="List any injuries, conditions or limitations we should consider..."
+                        value={healthConditions}
+                        onChangeText={setHealthConditions}
+                        multiline
+                        numberOfLines={4}
+                        textAlignVertical="top"
+                    />
+                </View>
+            </View>
+
+            <View style={styles.formField}>
+                <Text style={styles.label}>Equipment Access</Text>
+                <View style={styles.equipmentButtons}>
+                    {[
+                        { value: 'minimal', label: 'Minimal', icon: 'home-outline' },
+                        { value: 'basic', label: 'Basic Gym', icon: 'barbell-outline' },
+                        { value: 'full', label: 'Full Gym', icon: 'fitness-outline' }
+                    ].map(item => (
+                        <TouchableOpacity
+                            key={item.value}
+                            style={[
+                                styles.equipmentButton,
+                                equipmentAccess === item.value && styles.equipmentButtonSelected
+                            ]}
+                            onPress={() => setEquipmentAccess(item.value)}
+                        >
+                            <Ionicons
+                                name={item.icon}
+                                size={24}
+                                color={equipmentAccess === item.value ? '#fff' : '#666'}
+                            />
+                            <Text
+                                style={[
+                                    styles.equipmentButtonText,
+                                    equipmentAccess === item.value && styles.equipmentButtonTextSelected
+                                ]}
+                            >
+                                {item.label}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <Text style={styles.helperText}>{equipmentDescriptions[equipmentAccess]}</Text>
+            </View>
+        </View>
+    );
+
+    const renderWorkoutPlan = () => (
+        <Animated.View style={[styles.workoutContainer, { opacity: fadeAnim }]}>
+            <LinearGradient
+                colors={['#FF6B00', '#FF8C3C']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.workoutHeader}
             >
-                <Picker.Item label="Beginner" value="beginner" />
-                <Picker.Item label="Intermediate" value="intermediate" />
-                <Picker.Item label="Advanced" value="advanced" />
-            </Picker>
-            <Text style={styles.label}>Fitness Goal</Text>
-            <Picker
-                selectedValue={fitnessGoal}
-                style={styles.picker}
-                onValueChange={(value) => setFitnessGoal(value)}
-            >
-                <Picker.Item label="Weight Loss" value="weight_loss" />
-                <Picker.Item label="Weight Gain" value="weight_gain" />
-                <Picker.Item label="Endurance" value="endurance" />
-                <Picker.Item label="Muscle Building" value="muscle_building" />
-                <Picker.Item label="Powerbuilding" value="powerbuilding" />
-            </Picker>
-            <Text style={styles.label}>Days per Week Available</Text>
-            <Picker
-                selectedValue={daysPerWeek}
-                style={styles.picker}
-                onValueChange={(value) => setDaysPerWeek(value)}
-            >
-                <Picker.Item label="2 days" value="2" />
-                <Picker.Item label="3 days" value="3" />
-                <Picker.Item label="4 days" value="4" />
-                <Picker.Item label="5 days" value="5" />
-                <Picker.Item label="6 days" value="6" />
-            </Picker>
-            <TextInput
-                style={[styles.input, styles.multilineInput]}
-                placeholder="Any health conditions or injuries?"
-                value={healthConditions}
-                onChangeText={setHealthConditions}
-                multiline
-                numberOfLines={3}
-            />
-            <Text style={styles.label}>Equipment Access</Text>
-            <Picker
-                selectedValue={equipmentAccess}
-                style={styles.picker}
-                onValueChange={(value) => setEquipmentAccess(value)}
-            >
-                <Picker.Item label="Minimal (Home Workout)" value="minimal" />
-                <Picker.Item label="Basic Gym Access" value="basic" />
-                <Picker.Item label="Full Gym Access" value="full" />
-            </Picker>
-            <TouchableOpacity style={styles.button} onPress={generateWorkout}>
-                <Text style={styles.buttonText}>Generate Workout</Text>
-            </TouchableOpacity>
-            {loading && <ActivityIndicator size="large" color="#FF6B00" />}
-            {error && <Text style={styles.errorText}>{error}</Text>}
-            {currentWorkout && (
-                <ScrollView>
-                    {currentWorkout.days.map((day, index) => (
-                        <View key={index} style={styles.dayContainer}>
-                            <Text style={styles.dayTitle}>{day.name}</Text>
-                            {day.exercises.map((exercise, idx) => (
-                                <View key={idx} style={styles.exerciseContainer}>
-                                    <Text style={styles.exerciseName}>{exercise.name}</Text>
-                                    <Text style={styles.exerciseDetails}>
-                                        {exercise.sets} sets x {exercise.reps} reps
-                                    </Text>
-                                    <Text style={styles.exerciseNote}>{exercise.notes}</Text>
+                <Text style={styles.workoutTitle}>Your Custom Workout Plan</Text>
+                <Text style={styles.workoutSubtitle}>
+                    {daysPerWeek}-day {userLevel} plan for {fitnessGoal.replace('_', ' ')}
+                </Text>
+            </LinearGradient>
+
+            {currentWorkout.days.map((day, index) => (
+                <View key={index} style={styles.dayContainer}>
+                    <View style={styles.dayHeader}>
+                        <Text style={styles.dayTitle}>{day.name}</Text>
+                        <View style={styles.dayTitleLine} />
+                    </View>
+
+                    {day.exercises.map((exercise, idx) => (
+                        <View key={idx} style={styles.exerciseContainer}>
+                            <View style={styles.exerciseHeader}>
+                                <Ionicons name="fitness" size={20} color="#FF6B00" />
+                                <Text style={styles.exerciseName}>{exercise.name}</Text>
+                            </View>
+                            <View style={styles.exerciseContent}>
+                                <View style={styles.exerciseDetails}>
+                                    <View style={styles.exerciseMetric}>
+                                        <Text style={styles.exerciseMetricValue}>{exercise.sets}</Text>
+                                        <Text style={styles.exerciseMetricLabel}>Sets</Text>
+                                    </View>
+                                    <View style={styles.exerciseMetricDivider} />
+                                    <View style={styles.exerciseMetric}>
+                                        <Text style={styles.exerciseMetricValue}>{exercise.reps}</Text>
+                                        <Text style={styles.exerciseMetricLabel}>Reps</Text>
+                                    </View>
                                 </View>
-                            ))}
+                                {exercise.notes && (
+                                    <View style={styles.exerciseNotes}>
+                                        <Text style={styles.exerciseNote}>{exercise.notes}</Text>
+                                    </View>
+                                )}
+                            </View>
                         </View>
                     ))}
-                </ScrollView>
-            )}
-        </ScrollView>
+                </View>
+            ))}
+
+            <TouchableOpacity style={styles.newPlanButton} onPress={resetForm}>
+                <Ionicons name="refresh" size={20} color="#fff" />
+                <Text style={styles.newPlanButtonText}>Create New Plan</Text>
+            </TouchableOpacity>
+        </Animated.View>
+    );
+
+    return (
+        <ImageBackground
+            source={require('../images/white.png')}
+            style={styles.backgroundImage}
+        >
+           <LinearGradient 
+  colors={['#EDEDED', '#EDEDED']} // Soft peach-orange to very light gray
+  style={styles.overlay} 
+>
+
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={styles.container}
+                >
+                    <ScrollView
+                        ref={scrollViewRef}
+                        contentContainerStyle={styles.scrollContainer}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        {!currentWorkout ? (
+                            <>
+                                {/* Progress indicator */}
+                                <View style={styles.progressContainer}>
+                                    {[1, 2, 3].map(step => (
+                                        <View key={step} style={styles.progressStep}>
+                                            <View style={[
+                                                styles.progressDot,
+                                                currentStep >= step ? styles.progressDotActive : {}
+                                            ]}>
+                                                {currentStep > step && (
+                                                    <Ionicons name="checkmark" size={16} color="#fff" />
+                                                )}
+                                                {currentStep === step && (
+                                                    <Text style={styles.progressDotText}>{step}</Text>
+                                                )}
+                                            </View>
+                                            {step < 3 && <View style={[
+                                                styles.progressLine,
+                                                currentStep > step ? styles.progressLineActive : {}
+                                            ]} />}
+                                        </View>
+                                    ))}
+                                </View>
+
+                                {/* Step content */}
+                                {renderStep()}
+
+                                {/* Error message */}
+                                {error && (
+                                    <View style={styles.errorContainer}>
+                                        <Ionicons name="alert-circle-outline" size={20} color="#FF3B30" />
+                                        <Text style={styles.errorText}>{error}</Text>
+                                    </View>
+                                )}
+
+                                {/* Navigation buttons */}
+                                <View style={styles.buttonContainer}>
+                                    {currentStep > 1 && (
+                                        <TouchableOpacity style={styles.backButton} onPress={prevStep}>
+                                            <Ionicons name="arrow-back" size={20} color="#fff" />
+                                            <Text style={styles.backButtonText}>Back</Text>
+                                        </TouchableOpacity>
+                                    )}
+
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.nextButton,
+                                            currentStep === 1 && !isStep1Valid && styles.disabledButton
+                                        ]}
+                                        onPress={nextStep}
+                                        disabled={currentStep === 1 && !isStep1Valid}
+                                    >
+                                        {loading ? (
+                                            <ActivityIndicator size="small" color="#fff" />
+                                        ) : (
+                                            <>
+                                                <Text style={styles.nextButtonText}>
+                                                    {currentStep < 3 ? 'Next' : 'Generate Workout'}
+                                                </Text>
+                                                <Ionicons name="arrow-forward" size={20} color="#fff" />
+                                            </>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                        ) : (
+                            renderWorkoutPlan()
+                        )}
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </LinearGradient>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        padding: 16,
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
     },
-    title: {
-        fontSize: 24,
+    overlay: {
+        flex: 1,
+    },
+    container: {
+        flex: 1,
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        padding: 20,
+        paddingTop: 60,
+        paddingBottom: 40,
+    },
+    progressContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    progressStep: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    progressDot: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    progressDotActive: {
+        backgroundColor: 'green',
+    },
+    progressDotText: {
+        color: '#fff',
         fontWeight: 'bold',
-        marginBottom: 16,
+    },
+    progressLine: {
+        height: 3,
+        width: (width - 150) / 2,
+        backgroundColor: 'rgba(255,255,255,0.2)',
+    },
+    progressLineActive: {
+        backgroundColor: 'green',
+    },
+    stepContainer: {
+        backgroundColor: 'rgba(255,255,255,0.95)',
+        borderRadius: 15,
+        padding: 20,
+        marginBottom: 20,
+    },
+    stepTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 8,
+    },
+    stepDescription: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 20,
+    },
+    formField: {
+        marginBottom: 20,
     },
     label: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#444',
         marginBottom: 8,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        overflow: 'hidden',
+        backgroundColor: '#f9f9f9',
+    },
+    input: {
+        flex: 1,
+        height: 50,
+        paddingHorizontal: 15,
+        fontSize: 16,
+    },
+    inputIcon: {
+        width: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f2f2f2',
+    },
+    textAreaWrapper: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        backgroundColor: '#f9f9f9',
+    },
+    textArea: {
+        height: 100,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        fontSize: 16,
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        backgroundColor: '#f9f9f9',
+        overflow: 'hidden',
     },
     picker: {
         height: 50,
-        width: '100%',
-        marginBottom: 16,
     },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        marginBottom: 16,
+    helperText: {
+        fontSize: 12,
+        color: '#777',
+        marginTop: 6,
+        fontStyle: 'italic',
     },
-    multilineInput: {
-        height: 80,
+    daysSelector: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    button: {
-        backgroundColor: '#FF6B00',
-        padding: 16,
-        borderRadius: 8,
+    dayButton: {
+        width: width / 6.5,
+        height: 50,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        backgroundColor: '#f9f9f9',
     },
-    buttonText: {
+    dayButtonSelected: {
+        backgroundColor: '#FF6B00',
+        borderColor: '#FF6B00',
+    },
+    dayButtonText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#666',
+    },
+    dayButtonTextSelected: {
         color: '#fff',
+    },
+    equipmentButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    equipmentButton: {
+        width: '31%',
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        backgroundColor: '#f9f9f9',
+    },
+    equipmentButtonSelected: {
+        backgroundColor: '#FF6B00',
+        borderColor: '#FF6B00',
+    },
+    equipmentButtonText: {
+        marginTop: 8,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#666',
+    },
+    equipmentButtonTextSelected: {
+        color: '#fff',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    backButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: 'gray'
+    },
+    backButtonText: {
+        marginLeft: 8,
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#fff',
+    },
+    nextButton: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
+        borderRadius: 8,
+        backgroundColor: '#FF6B00',
+        marginLeft: 10,
+    },
+    disabledButton: {
+        backgroundColor: 'rgba(255,107,0,0.5)',
+    },
+    nextButtonText: {
+        marginRight: 8,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    errorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        backgroundColor: 'rgba(255,59,48,0.1)',
+        borderRadius: 8,
+        marginBottom: 20,
     },
     errorText: {
-        color: 'red',
-        marginBottom: 16,
+        marginLeft: 8,
+        color: '#FF3B30',
+        fontSize: 14,
+    },
+    workoutContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        overflow: 'hidden',
+        marginBottom: 20,
+    },
+    workoutHeader: {
+        padding: 20,
+    },
+    workoutTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: 4,
+    },
+    workoutSubtitle: {
+        fontSize: 16,
+        color: 'rgba(255,255,255,0.8)',
     },
     dayContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
-        marginBottom: 16,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    dayHeader: {
+        marginBottom: 15,
     },
     dayTitle: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: '#333',
-        marginBottom: 12,
+        marginBottom: 8,
+    },
+    dayTitleLine: {
+        height: 3,
+        width: 60,
+        backgroundColor: '#FF6B00',
+        borderRadius: 2,
     },
     exerciseContainer: {
-        marginBottom: 8,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
+        marginBottom: 10,
+        overflow: 'hidden',
+    },
+    exerciseHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        backgroundColor: '#f2f2f2',
     },
     exerciseName: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#333',
+        marginLeft: 10,
+    },
+    exerciseContent: {
+        padding: 15,
     },
     exerciseDetails: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
+    },
+    exerciseMetric: {
+        alignItems: 'center',
+        padding: 10,
+    },
+    exerciseMetricValue: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#FF6B00',
+    },
+    exerciseMetricLabel: {
         fontSize: 14,
         color: '#666',
     },
-    exerciseNote: {
-        fontSize: 12,
-        color: '#999',
+    exerciseMetricDivider: {
+        height: 30,
+        width: 1,
+        backgroundColor: '#ddd',
+        marginHorizontal: 20,
     },
+    exerciseNotes: {
+        padding: 10,
+        backgroundColor: 'rgba(255,107,0,0.1)',
+        borderRadius: 6,
+    },
+    exerciseNote: {
+        fontSize: 14,
+        color: '#666',
+        fontStyle: 'italic',
+    },
+    newPlanButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FF6B00',
+        padding: 15,
+        margin: 15,
+        borderRadius: 10,
+    },
+    newPlanButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginLeft: 8,
+    }
 });
 
 export default AdaptiveWorkout;

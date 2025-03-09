@@ -11,7 +11,7 @@ const Entry = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Displaying the uploaded image */}
-      {/* <Image source={require('./path/to/image.png')} style={styles.logo} /> */}
+      <Image source={require('../images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>FiteX</Text>
       <Text style={styles.subtitle}>Track your Health Journey with ease</Text>
       {loading ? (

@@ -22,6 +22,7 @@ const MealPlanDisplay = ({ title, meals }) => {
                 Ingredients: {Array.isArray(meal.ingredients) ? meal.ingredients.join(', ') : meal.ingredients}
               </Text>
             )}
+            <Text style={styles.description}>Description: {meal.description}</Text>
           </View>
         </View>
       ))}
@@ -65,6 +66,11 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   mealCalories: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  description: {
     fontSize: 14,
     color: '#666',
     marginBottom: 4,
