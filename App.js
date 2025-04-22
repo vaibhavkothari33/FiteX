@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 // Import Screens
 import Entry from './screens/Entry';
 import Login from './screens/Login';
+import SignUp from './screens/SignUp';
 import UserInput from './screens/UserInput';
 import Dashboard from './screens/Dashboard';
 import Exercise from './screens/Exercise';
@@ -61,6 +62,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Entry">
         <Stack.Screen name="Entry" component={Entry} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="UserInput" component={UserInput} options={{ headerShown: false }} />
         <Stack.Screen name="WorkoutPlan" component={WorkoutPlan} options={{ headerShown: true }} />
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
