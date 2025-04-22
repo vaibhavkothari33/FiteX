@@ -70,7 +70,7 @@ const Dashboard = () => {
             style={styles.shareButton}
             onPress={handleShare}
           >
-            <Ionicons name="share-social" size={24} color="#FF6B00" />
+            <Ionicons name="share-social" size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>
         <Text style={styles.date}>{new Date().toLocaleDateString('en-US', { 
@@ -223,8 +223,10 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     padding: 20,
-    borderRadius: 8,
-    backgroundColor: '#fff',
+    borderRadius: 50,
+    backgroundColor: '#FF6B00',
+    alignItems: 'center',
+    justifyContent: 'center',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
