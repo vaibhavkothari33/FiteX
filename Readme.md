@@ -62,6 +62,13 @@ FiteX is a modern fitness application designed to help users achieve their healt
 ### Workout  
 <img src="./images/workout.jpeg" alt="Workout" width="300" />  
 
+### Cheat Meal Generation
+<img src="./images/cheatMeal.jpeg" alt="Meal Plan 2" width="300" /> 
+
+## Project report
+Available in the Project root folder  
+
+[Project Report Click Here](FiteX-Report.pdf)
 
 ## 📝 License
 
