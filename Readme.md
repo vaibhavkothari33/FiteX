@@ -68,7 +68,7 @@ FiteX is a modern fitness application designed to help users achieve their healt
 ## Project report
 Available in the Project root folder  
 
-[Project Report Click Here](FiteX-Report.pdf)
+[Project Report Click Here](FiteXReport.pdf)
 
 ## 📝 License
 
